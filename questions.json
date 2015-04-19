@@ -1,0 +1,57 @@
+[
+  {
+    "question": "The moon is a ?",
+    "choice": [
+      "Comet",
+      "Satellite",
+      "Star",
+      "Planet"
+    ],
+    "answer": 1
+
+  },
+  {
+    "question": "Who receives Dronacharya Award?",
+    "choice": [
+      "Scientists",
+      "Movie actors",
+      "Sports Coaches",
+      "Sportsmen"
+    ],
+    "answer": 2
+
+  },
+  {
+    "question": "Who was the first Indian to be-elected to the British Parliament?",
+    "choice": [
+      "Dadabhai Naoroji",
+      "Mothilal Nehru",
+      "Mahathma Gandhi",
+      "Gopalakrishna Gokhale"
+    ],
+    "answer": 0
+
+  },
+  {
+    "question": "In which year India Joined the United Nations?",
+    "choice": [
+      "1954",
+      "1955",
+      "1956",
+      "1957"
+    ],
+    "answer": 1
+
+  },
+  {
+    "question": "A hole is made in a brass plate and it is heated. The size of the hole will?",
+    "choice": [
+      "increase",
+      "decrease",
+      "first increase and then decrease",
+      "remain unchanged"
+    ],
+    "answer": 2
+
+  }
+]
