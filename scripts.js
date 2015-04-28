@@ -134,7 +134,7 @@ function loadJSON (callback) {
 
 function next () {
     // check whether question is answered
-    if (validateChoice()) {
+    if (validateAnswerAndRecord()) {
         // remove error
         elem_error.innerHTML = "";
 
@@ -185,7 +185,7 @@ function showQuestion () {
         // checkbox
         var elem_choice_checkbox = document.createElement('input');
         var cId = num + '-' + i;
-        setAttributes(elem_choice_checkbox, {'type':'checkbox', 'class':'checkbox', 'id':cId});
+        setAttributes(elem_choice_checkbox, {'type':'radio', 'name':'choices', 'value':cId});
         elem_choice.appendChild(elem_choice_checkbox);
 
         // choice content
@@ -198,18 +198,14 @@ function showQuestion () {
 
     elem_q.appendChild(fragment);
 
-    var checkboxs = document.getElementsByClassName('checkbox');
+    var radioInputs = document.getElementsByName('choices');
 
     // check button visibility
     checkBtnVisibility();
 
     // show checked answer
-    showCheckedAnswer(checkboxs);
+    showCheckedAnswer(radioInputs);
 
-    // bind checkbox handler
-    for (var j = 0, len = checkboxs.length; j < len; j++) {
-        EventUtil.addEvent(checkboxs[j], 'click', recordAnswer);
-    }
 }
 
 function checkBtnVisibility () {
@@ -231,22 +227,13 @@ function checkBtnVisibility () {
     elem_next.disabled = false;
 }
 
-function showCheckedAnswer (checkboxs) {
-    // check whether already had answered current question
+function showCheckedAnswer (inputs) {
+    // if current question had been answered, then display the answer
     for (var i = 0,len = results.length; i < len; i++) {
         if (results[i].questionNum == num) {
-            checkboxs[results[i].answerNum].checked = true;
+            inputs[results[i].answerNum].checked = true;
         }
     }
-}
-
-function recordAnswer () {
-    var parts = this.id.split('-');
-    var result = {
-        questionNum : parts[0],
-        answerNum : parts[1]
-    };
-    results.push(result);
 }
 
 function getScore () {
@@ -267,11 +254,17 @@ function clearNode (elem) {
     }
 }
 
-function validateChoice () {
-    var checkboxs = document.getElementsByClassName('checkbox');
-    for (var i = 0, len = checkboxs.length; i < len; i++) {
-        var thisCheckbox = checkboxs[i];
-        if (thisCheckbox.checked) {
+function validateAnswerAndRecord () {
+    var radioInputs = document.getElementsByName('choices');
+    for (var i = 0, len = radioInputs.length; i < len; i++) {
+        if (radioInputs[i].checked) {
+            var val = radioInputs[i].value;
+            var parts = val.split('-');
+            var result = {
+                questionNum : parts[0],
+                answerNum : parts[1]
+            };
+            results.push(result);
             return true;
         }
     }
