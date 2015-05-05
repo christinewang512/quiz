@@ -1,63 +1,6 @@
 /**
  * Created by christine on 3/31/15.
  */
-var allQuestions = [
-    {
-        question: "The moon is a ?",
-        choice: [
-            "Comet",
-            "Satellite",
-            "Star",
-            "Planet"
-        ],
-        answer: 1
-
-    },
-    {
-        question: "Who receives Dronacharya Award?",
-        choice: [
-            "Scientists",
-            "Movie actors",
-            "Sports Coaches",
-            "Sportsmen"
-        ],
-        answer: 2
-
-    },
-    {
-        question: "Who was the first Indian to be-elected to the British Parliament?",
-        choice: [
-            "Dadabhai Naoroji",
-            "Mothilal Nehru",
-            "Mahathma Gandhi",
-            "Gopalakrishna Gokhale"
-        ],
-        answer: 0
-
-    },
-    {
-        question: "In which year India Joined the United Nations?",
-        choice: [
-            "1954",
-            "1955",
-            "1956",
-            "1957"
-        ],
-        answer: 1
-
-    },
-    {
-        question: "A hole is made in a brass plate and it is heated. The size of the hole will?",
-        choice: [
-            "increase",
-            "decrease",
-            "first increase and then decrease",
-            "remain unchanged"
-        ],
-        answer: 2
-
-    }
-];
 
 // Event Util
 var EventUtil = {
@@ -84,15 +27,16 @@ var EventUtil = {
 };
 
 var elem_q = document.getElementById('question'),
+    elem_c = document.getElementById('choices'),
     elem_next = document.getElementById('next'),
     elem_back = document.getElementById('back'),
     elem_error = document.getElementById('error'),
     num,
-//    allQuestions = [],
+    allQuestions = [],
     results = [];
 
 window.onload = function(){
-  /*  // get question through json file
+    // get question through json file
     loadJSON(function(response){
         allQuestions = JSON.parse(response);
         // initialize
@@ -105,18 +49,7 @@ window.onload = function(){
 
         // handle with back button
         EventUtil.addEvent(elem_back, 'click', back);
-    }); */
-
-    // initialize
-    // show first question
-    num = 0;
-    showQuestion();
-
-    // handle with next button
-    EventUtil.addEvent(elem_next, 'click', next);
-
-    // handle with back button
-    EventUtil.addEvent(elem_back, 'click', back);
+    });
 
 }
 
@@ -134,27 +67,32 @@ function loadJSON (callback) {
 
 function next () {
     // check whether question is answered
+    // if not show the error msg
     if (validateAnswerAndRecord()) {
-        // remove error
-        elem_error.innerHTML = "";
+        // hide error
+        elem_error.style.display = 'none';
 
         num ++;
-        // if the question is not the last question, show next question
+        // if the question is not the last one, show next question
         if (num < allQuestions.length) {
             showQuestion();
         }
         // else show the final score
         else {
             clearNode(elem_q);
-            elem_q.innerHTML = '<p>Game Over</p><p>Your total score is ' + getScore() + '</p>';
+            elem_q.innerHTML = '<p>Game Over</p>';
+            elem_c.innerHTML = '<p class="result">Your total score is <span>' + getScore() + '</span> !</p>';
             checkBtnVisibility();
         }
     } else {
+        elem_error.style.display = 'block';
         elem_error.innerHTML = 'Please choose an answer.'
     }
 }
 
 function back () {
+    validateAnswerAndRecord();
+
     if (num > 0) {
         num --;
         showQuestion();
@@ -165,20 +103,16 @@ function showQuestion () {
     var question = allQuestions[num];
 
     // remove former question
-    clearNode(elem_q);
+    clearNode(elem_q, elem_c);
 
-    // add new question
-    var fragment = document.createDocumentFragment();
-
-    // create title element
+    // show question
     var elem_title = document.createElement('p');
     elem_title.setAttribute('id', 'title');
     elem_title.textContent = question.question;
-    fragment.appendChild(elem_title);
+    elem_q.appendChild(elem_title);
 
-    // create choice element
+    // show choices
     var elem_choices = document.createElement('ul');
-    elem_choices.setAttribute('id', 'choices');
     var choices = question.choice;
     for (var i = 0; i < choices.length; i++) {
         var elem_choice = document.createElement('li');
@@ -194,9 +128,7 @@ function showQuestion () {
 
         elem_choices.appendChild(elem_choice);
     }
-    fragment.appendChild(elem_choices);
-
-    elem_q.appendChild(fragment);
+    elem_c.appendChild(elem_choices);
 
     var radioInputs = document.getElementsByName('choices');
 
@@ -237,9 +169,9 @@ function showCheckedAnswer (inputs) {
 }
 
 function getScore () {
+    var score = 0;
     for (var i = 0, len = results.length; i < len; i++) {
-        var result = results[i],
-            score = 0;
+        var result = results[i];
         console.log(result.answerNum, allQuestions[result.questionNum].answer);
         if (result.answerNum == allQuestions[result.questionNum].answer) {
             score += 10;
@@ -248,9 +180,12 @@ function getScore () {
     return score;
 }
 
-function clearNode (elem) {
-    while (elem.firstChild) {
-        elem.removeChild(elem.firstChild);
+function clearNode () {
+    for (var i = 0, len = arguments.length; i < len; i++) {
+        var elem = arguments[i];
+        while (elem.firstChild) {
+            elem.removeChild(elem.firstChild);
+        }
     }
 }
 

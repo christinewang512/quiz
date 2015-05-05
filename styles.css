@@ -1,17 +1,92 @@
+p, ul, div {
+    margin: 0;
+    padding: 0;
+}
+
 body {
-    font: 15px "Courier New", arial;
-    color: #000;
+    font: 15px "Helvetica Neue", arial;
+    color: #333;
 }
 
 a, a:hover, a:active {
     text-decoration: none;
-    color: #000;
 }
 
 ul li {
     list-style-type: none;
 }
 
-#error {
-    color: red;
+input[type="radio"] {
+    width: 2em;
+    margin: 0;
+    padding: 0;
+    font-size: 1em;
+    border: 1px solid #ddd;
+}
+
+.container {
+    width: 480px;
+    margin: 5% auto;
+}
+
+.container h1 {
+    text-align: center;
+}
+
+.panel {
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .05);
+    -moz-box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .05);
+    box-shadow: 0 1px 1px 1px rgba(0, 0, 0, .05);
+}
+
+.panel-heading {
+    padding: 10px 15px;
+    border-bottom: 1px solid #ddd;
+    background-color: #f5f5f5;
+    font-size: 18px;
+}
+
+.panel-body {
+    padding: 10px 15px;
+    line-height: 1.7;
+}
+
+.error {
+    margin-bottom: 10px;
+    padding: 15px;
+    color: #a94442;
+    background-color: #f2dede;
+    border: 1px solid #ebccd1;
+    border-radius: 4px;
+    display: none;
+}
+
+.btns {
+    text-align: center;
+}
+
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    color: #fff;
+    background-color: #337ab7;
+    border: 1px solid #2e6da4;
+    border-radius: 4px;
+    line-height: 1.5;
+    cursor: pointer;
+    margin: 0 10px;
+}
+
+.result {
+    color: #ff8144;
+}
+
+.result span {
+    color: #dc143c;
+    font-size: 20px;
+    font-weight: bold;
 }
