@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <title>Quiz</title>
     <link rel="stylesheet" href="styles.css"/>
-
+    <script src="jquery-1.11.1.js"></script>
+    <script src="scripts.js"></script>
 </head>
 <body>
-<div class="container">
+<div id="container" class="container">
     <h1>Quiz</h1>
     <div id="error" class="error"></div>
-    <div id="question-container" class="panel">
+    <div id="question-panel" class="panel">
         <div id="question" class="panel-heading"></div>
         <div id="choices" class="panel-body"></div>
     </div>
@@ -19,8 +20,12 @@
         <input type="button" value="Next" id="next" class="btn"/>
     </div>
 </div>
-
-
-<script src="scripts.js"></script>
+<div id="overlay"></div>
+<div id="welcome-modal" class="modal">
+    <div id="welcome-modal-body" class="modal-body"></div>
+    <div class="modal-footer">
+        <input type="button" value="Start" id="start" class="btn"/>
+    </div>
+</div>
 </body>
 </html>

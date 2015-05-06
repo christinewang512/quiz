@@ -26,16 +26,49 @@ var EventUtil = {
 
 };
 
-var elem_q = document.getElementById('question'),
-    elem_c = document.getElementById('choices'),
-    elem_next = document.getElementById('next'),
-    elem_back = document.getElementById('back'),
-    elem_error = document.getElementById('error'),
-    num,
+var num,
     allQuestions = [],
     results = [];
 
+
 window.onload = function(){
+
+    initialQuestions();
+
+    showWelcomeModal();
+
+}
+
+function showWelcomeModal () {
+    var $overlay = $('#overlay'),
+        $wel_modal = $('#welcome-modal'),
+        $content = $('#welcome-modal-body'),
+        btn_start = document.getElementById('start');
+
+    // center the modal
+    var top, left;
+    top = Math.max($(window).height() - $wel_modal.outerHeight(), 0) / 2;
+    left = Math.max($(window).width() - $wel_modal.outerWidth(), 0) / 2;
+
+    $wel_modal.css({
+        top: top + $(window).scrollTop(),
+        left: left + $(window).scrollLeft()
+    });
+
+    // add content
+    $content.empty().append('Welcome');
+
+    // show overlay and modal
+    $overlay.show('fast');
+    $wel_modal.slideDown();
+
+    EventUtil.addEvent(btn_start, 'click', start);
+}
+
+function initialQuestions () {
+    var elem_next = document.getElementById('next'),
+        elem_back = document.getElementById('back');
+
     // get question through json file
     loadJSON(function(response){
         allQuestions = JSON.parse(response);
@@ -50,7 +83,6 @@ window.onload = function(){
         // handle with back button
         EventUtil.addEvent(elem_back, 'click', back);
     });
-
 }
 
 function loadJSON (callback) {
@@ -65,7 +97,17 @@ function loadJSON (callback) {
     xobj.send();
 }
 
+function start () {
+    var $overlay = $('#overlay'),
+        $wel_modal = $('#welcome-modal');
+
+    $overlay.hide();
+    $wel_modal.slideUp();
+}
+
 function next () {
+    var elem_error = document.getElementById('error');
+
     // check whether question is answered
     // if not show the error msg
     if (validateAnswerAndRecord()) {
@@ -73,16 +115,14 @@ function next () {
         elem_error.style.display = 'none';
 
         num ++;
+
         // if the question is not the last one, show next question
         if (num < allQuestions.length) {
-            showQuestion();
+            changeQuestion();
         }
         // else show the final score
         else {
-            clearNode(elem_q);
-            elem_q.innerHTML = '<p>Game Over</p>';
-            elem_c.innerHTML = '<p class="result">Your total score is <span>' + getScore() + '</span> !</p>';
-            checkBtnVisibility();
+            $('#question-panel').fadeOut(1000, showSocre);
         }
     } else {
         elem_error.style.display = 'block';
@@ -95,12 +135,20 @@ function back () {
 
     if (num > 0) {
         num --;
-        showQuestion();
+        changeQuestion();
     }
 }
 
+function changeQuestion () {
+    // fade out the current question
+    $('#question-panel').fadeOut(1000, showQuestion);
+
+}
+
 function showQuestion () {
-    var question = allQuestions[num];
+    var elem_q = document.getElementById('question'),
+        elem_c = document.getElementById('choices'),
+        question = allQuestions[num];
 
     // remove former question
     clearNode(elem_q, elem_c);
@@ -108,7 +156,7 @@ function showQuestion () {
     // show question
     var elem_title = document.createElement('p');
     elem_title.setAttribute('id', 'title');
-    elem_title.textContent = question.question;
+    elem_title.textContent = 'Q' + (num + 1 ) + '. ' + question.question;
     elem_q.appendChild(elem_title);
 
     // show choices
@@ -138,9 +186,25 @@ function showQuestion () {
     // show checked answer
     showCheckedAnswer(radioInputs);
 
+    // fade in the question panel
+    $('#question-panel').fadeIn(1000);
+}
+
+function showSocre () {
+    var elem_q = document.getElementById('question'),
+        elem_c = document.getElementById('choices');
+
+    elem_q.innerHTML = '<p>Game Over</p>';
+    elem_c.innerHTML = '<p class="result">Your total score is <span>' + getScore() + '</span> !</p>';
+    checkBtnVisibility();
+
+    $('#question-panel').fadeIn(1000);
 }
 
 function checkBtnVisibility () {
+    var elem_next = document.getElementById('next'),
+        elem_back = document.getElementById('back');
+
     // if current question is the first question, disable the back button.
     if (num == 0) {
         elem_back.disabled = true;

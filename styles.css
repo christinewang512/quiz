@@ -73,6 +73,7 @@ input[type="radio"] {
     display: inline-block;
     padding: 6px 12px;
     color: #fff;
+    font-size: 14px;
     background-color: #337ab7;
     border: 1px solid #2e6da4;
     border-radius: 4px;
@@ -89,4 +90,46 @@ input[type="radio"] {
     color: #dc143c;
     font-size: 20px;
     font-weight: bold;
+}
+
+#overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0.7;
+    filter: alpha(opacity=70); /* For IE8 and earlier */
+}
+
+.modal {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 600px;
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, .2);
+    -webkit-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+    -moz-box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, .5);
+    border-radius: 6px;
+}
+
+.modal-body {
+    padding: 20px 15px;
+    text-align: center;
+    font-size: 20px;
+}
+
+.modal-footer {
+    padding: 10px;
+    border-top: 1px solid #e5e5e5;
+    text-align: center;
+}
+
+#welcome-modal {
+    display: none;
 }
