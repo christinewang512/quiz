@@ -26,6 +26,39 @@ var EventUtil = {
 
 };
 
+// Modal Util
+var ModalUtil = {
+    // move the modal to the center
+    center : function ($modal) {
+        var left,
+            top;
+
+        top = Math.max($(window).height() - $modal.outerHeight(), 0) / 2;
+        left = Math.max($(window).width() - $modal.outerWidth(), 0) / 2;
+
+        $modal.css({
+            top: top + $(window).scrollTop(),
+            left: left + $(window).scrollLeft()
+        });
+
+    },
+
+    // open the modal
+    open : function ($overlay, $modal) {
+        $overlay.show('normal', function () {
+            $modal.slideDown('slow');
+        });
+
+    },
+
+    // close the modal
+    close : function ($overlay, $modal) {
+        $modal.slideUp('slow', function () {
+            $overlay.hide('fast');
+        });
+    }
+};
+
 var num,
     allQuestions = [],
     results = [];
@@ -35,34 +68,89 @@ window.onload = function(){
 
     initialQuestions();
 
-    showWelcomeModal();
+    showSignInModal();
 
 }
 
-function showWelcomeModal () {
+function showSignInModal () {
     var $overlay = $('#overlay'),
-        $wel_modal = $('#welcome-modal'),
-        $content = $('#welcome-modal-body'),
-        btn_start = document.getElementById('start');
+        $modal = $('#sign-in'),
+        $close = $('#sign-in-close'),
+        $uname = $('#sign-in-uname'),
+        $psw = $('#sign-in-psw'),
+        $btn_signin = $('#btn-signIn'),
+        $link_signup = $('#link-signup');
 
-    // center the modal
-    var top, left;
-    top = Math.max($(window).height() - $wel_modal.outerHeight(), 0) / 2;
-    left = Math.max($(window).width() - $wel_modal.outerWidth(), 0) / 2;
+    // Center the sign in modal
+    ModalUtil.center($modal);
 
-    $wel_modal.css({
-        top: top + $(window).scrollTop(),
-        left: left + $(window).scrollLeft()
+    // show sign in modal
+    ModalUtil.open($overlay, $modal);
+
+    // bind event on btns and links
+    EventUtil.addEvent($close.get(0), 'click', function (event) {
+        event.preventDefault();
+        ModalUtil.close($overlay, $modal);
+    });
+    EventUtil.addEvent($btn_signin.get(0), 'click', signIn);
+    EventUtil.addEvent($link_signup.get(0), 'click', function (event) {
+        event.preventDefault();
+        $modal.hide('fast');
+        showSignUpModal();
+    });
+}
+
+function signIn () {
+
+}
+
+function showSignUpModal () {
+    var $overlay = $('#overlay'),
+        $modal = $('#sign-up'),
+        $close = $('#sign-up-close'),
+        $uname = $('#sign-up-uname'),
+        $psw = $('#sign-up-psw'),
+        $btn_signup = $('#btn-signUp');
+
+    // Center the sign in modal
+    ModalUtil.center($modal);
+
+    // show sign in modal
+    ModalUtil.open($overlay, $modal);
+
+    // bind event on btns and links
+    EventUtil.addEvent($close.get(0), 'click', function (event) {
+        event.preventDefault();
+        ModalUtil.close($overlay, $modal);
+    });
+    EventUtil.addEvent($btn_signup.get(0), 'click', signUp);
+
+    // add validation rules
+    var validator = $('#form-sign-up').validate({
+        rules : {
+            name : {
+                required : true,
+                minlength : 6
+            },
+            password : {
+                required : true
+            }
+        },
+        messages : {
+            name : {
+                required : "Required input",
+                minlength : $.validator.format("At least {0} characters required!")
+            },
+            password : {
+                required: "Required input"
+            }
+        }
     });
 
-    // add content
-    $content.empty().append('Welcome');
+}
 
-    // show overlay and modal
-    $overlay.show('fast');
-    $wel_modal.slideDown();
+function signUp () {
 
-    EventUtil.addEvent(btn_start, 'click', start);
 }
 
 function initialQuestions () {
