@@ -59,6 +59,48 @@ var ModalUtil = {
     }
 };
 
+// Cookie Util
+var CookieUtil = {
+  get : function (name) {
+      var cookieName = encodeURIComponent(name) + '=',
+          cookieStart = document.cookie.indexOf(cookieName),
+          cookieValue = null,
+          cookieEnd;
+
+      if (cookieStart > -1) {
+          var cookieEnd = document.cookie.indexOf(';', cookieStart);
+          if (cookieEnd < 0) {
+            cookieEnd = document.cookie.length;
+          }
+      }
+
+      cookieValue = decodeURIComponent(document.cookie.substring(cookieStart + cookieName.length, cookieEnd));
+      return cookieValue;
+  },
+
+  set : function (name, value, expires, path, domain, secure) {
+      var cookieText = encodeURIComponent(name) + '=' + encodeURIComponent(value);
+
+      if (expires instanceof Date) {
+          cookieText += cookieText + ';expires=' + expires.toGMTString();
+      }
+
+      if (path) {
+          cookieText += cookieText + ';path=' + path;
+      }
+
+      if (domain) {
+          cookieText += cookieText + ';domain=' + domain;
+      }
+
+      if (secure) {
+          cookieText += cookieText + ';secure=' + secure;
+      }
+
+      document.cookie = cookieText;
+  }
+};
+
 var num,
     allQuestions = [],
     results = [];
@@ -67,9 +109,42 @@ var num,
 window.onload = function(){
 
     initialQuestions();
+    console.log(CookieUtil.get('name'));
+    if (CookieUtil.get('name')) {
+        showWelcomeModal();
+    } else {
+        showSignInModal();
+    }
 
-    showSignInModal();
+}
 
+function showWelcomeModal () {
+    var name = CookieUtil.get('name'),
+        $overlay = $('#overlay'),
+        $modal = $('#welcome-modal'),
+        $close = $('#welcome-close'),
+        $start = $('#start'),
+        $modal_body = $('#welcome-modal-body');
+
+    // add modal conent
+    $modal_body.html(name + ', Welcome back to Quiz!');
+
+    // Center the welcome modal
+    ModalUtil.center($modal);
+
+    // show welcome modal
+    ModalUtil.open($overlay, $modal);
+
+    // bind event on btns and links
+    EventUtil.addEvent($close.get(0), 'click', function (event) {
+        event.preventDefault();
+        ModalUtil.close($overlay, $modal);
+    });
+
+    EventUtil.addEvent($start.get(0), 'click', function (event) {
+        event.preventDefault();
+        ModalUtil.close($overlay, $modal);
+    });
 }
 
 function showSignInModal () {
@@ -78,7 +153,7 @@ function showSignInModal () {
         $close = $('#sign-in-close'),
         $uname = $('#sign-in-uname'),
         $psw = $('#sign-in-psw'),
-        $btn_signin = $('#btn-signIn'),
+        $form = $('#form-sign-in'),
         $link_signup = $('#link-signup');
 
     // Center the sign in modal
@@ -92,15 +167,35 @@ function showSignInModal () {
         event.preventDefault();
         ModalUtil.close($overlay, $modal);
     });
-    EventUtil.addEvent($btn_signin.get(0), 'click', signIn);
-    EventUtil.addEvent($link_signup.get(0), 'click', function (event) {
+    EventUtil.addEvent($form.get(0), 'submit', function (event) {
         event.preventDefault();
-        $modal.hide('fast');
-        showSignUpModal();
+        localStorage.setItem('uname', $uname.val());
+        localStorage.setItem('psw', $psw.val());
+        CookieUtil.set('name', $uname.val());
+        ModalUtil.close($overlay, $modal);
     });
-}
 
-function signIn () {
+    // add validation rules
+    var validator = $form.validate({
+        rules : {
+            name : {
+                required : true,
+                minlength : 6
+            },
+            password : {
+                required : true
+            }
+        },
+        messages : {
+            name : {
+                required : "Required input",
+                minlength : $.validator.format("At least {0} characters required!")
+            },
+            password : {
+                required: "Required input"
+            }
+        }
+    });
 
 }
 
@@ -123,7 +218,6 @@ function showSignUpModal () {
         event.preventDefault();
         ModalUtil.close($overlay, $modal);
     });
-    EventUtil.addEvent($btn_signup.get(0), 'click', signUp);
 
     // add validation rules
     var validator = $('#form-sign-up').validate({
@@ -147,9 +241,11 @@ function showSignUpModal () {
         }
     });
 
-}
+    // handle submit form action
+    $('#form-sign-up').submit(function (event) {
+        event.preventDefault();
 
-function signUp () {
+    });
 
 }
 

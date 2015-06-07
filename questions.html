@@ -25,8 +25,8 @@
 <!-- welcome back modal -->
 <div id="welcome-modal" class="modal">
     <div id="modal-header" class="modal-header">
-        <a href='#' class="close"><span aria-hidden="true">×</span></a>
-        <h4 class="header-title">Welcome</h4>
+        <a href='#' class="close" id="welcome-close"><span aria-hidden="true">×</span></a>
+        <h4 class="header-title">Welcome Back</h4>
     </div>
     <div id="welcome-modal-body" class="modal-body center">
 
@@ -42,24 +42,25 @@
         <a href='#' class="close" id="sign-in-close"><span aria-hidden="true">×</span></a>
         <h4 class="header-title">Sign In</h4>
     </div>
+    <form action="" id="form-sign-in">
     <div id="sign-in-body" class="modal-body">
         <div class="form-group">
             <label for="sign-in-uname" class="control-label">Username</label>
             <div class="input">
-                <input type="text" id="sign-in-uname" class="form-control"/>
+                <input type="text" id="sign-in-uname" name="name" class="form-control"/>
             </div>
         </div>
         <div class="form-group">
             <label for="sign-in-psw" class="control-label">Password</label>
             <div class="input">
-                <input type="password" id="sign-in-psw" class="form-control"/>
+                <input type="password" id="sign-in-psw" name="password" class="form-control"/>
             </div>
         </div>
     </div>
     <div id="sign-in-footer" class="modal-footer">
-        <input type="button" value="Sign In" id="btn-signIn" class="btn"/>
-        <a href="#" id="link-signup"> >>> Sign Up</a>
+        <input type="submit" value="Sign In" id="btn-signIn" class="btn"/>
     </div>
+    </form>
 </div>
 
 <!-- sign up modal -->
@@ -68,8 +69,8 @@
         <a href='#' class="close" id="sign-up-close"><span aria-hidden="true">×</span></a>
         <h4 class="header-title">Sign Up</h4>
     </div>
+    <form action="" id="form-sign-up">
     <div id="sign-up-body" class="modal-body">
-        <form action="" id="form-sign-up">
         <div class="form-group">
             <label for="sign-up-uname" class="control-label">Username</label>
             <div class="input">
@@ -82,11 +83,12 @@
                 <input type="password" id="sign-up-psw" name="password" class="form-control"/>
             </div>
         </div>
-        </form>
     </div>
     <div id="sign-up-footer" class="modal-footer">
-        <input type="button" value="Sign up" id="btn-signUp" class="btn"/>
+        <input type="submit" value="Sign up" id="btn-signUp" class="btn"/>
     </div>
+    </form>
 </div>
+
 </body>
 </html>
